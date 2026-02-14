@@ -13,9 +13,13 @@
 
     <div class="proposal-box">
         <h1>Can we be each other's Valentine, Princess?</h1>
-        <div class="btn-container" id="container">
-            <button class="val-btn" id="yesBtn" onclick="handleYes()">Yes</button>
-            <button class="val-btn" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+        <div class="main-btn-wrapper">
+            <div class="btn-slot" id="yesSlot">
+                <button class="val-btn" id="yesBtn" onclick="handleYes()">Yes</button>
+            </div>
+            <div class="btn-slot" id="noSlot">
+                <button class="val-btn" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+            </div>
         </div>
     </div>
 
@@ -33,8 +37,8 @@
 
     <script>
         /**
-         * Note: Added a 'locked' flag to ensure the Yes button captures 
-         * its side-by-side position before the No button leaves the layout.
+         * Note: Buttons are now in separate containers. 
+         * The 'Yes' button is locked to its slot's coordinates on the first 'No' move.
          */
         let moveCount = 0;
         let yesScale = 1;
@@ -54,10 +58,8 @@
             const noBtn = document.getElementById('noBtn');
             const yesBtn = document.getElementById('yesBtn');
 
-            // 1. Lock the Yes Button in place immediately
             if (!yesLocked) {
                 const yesRect = yesBtn.getBoundingClientRect();
-                // Set to fixed using current screen coordinates so it never moves
                 yesBtn.style.position = 'fixed';
                 yesBtn.style.left = `${yesRect.left}px`;
                 yesBtn.style.top = `${yesRect.top}px`;
@@ -67,7 +69,6 @@
 
             moveCount++;
 
-            // 2. Growth Logic (after 2 moves)
             if (moveCount > 2) {
                 yesScale += 0.4;
                 yesBtn.style.transform = `scale(${yesScale})`;
@@ -75,12 +76,10 @@
                 baseRadiusMax += 30;
             }
 
-            // 3. Center Calculation based on the now-fixed Yes button
             const yesRect = yesBtn.getBoundingClientRect();
             const centerX = yesRect.left + (yesRect.width / 2);
             const centerY = yesRect.top + (yesRect.height / 2);
 
-            // 4. 90% Screen Margin (Strict 0.1/0.9)
             const minX = window.innerWidth * 0.1;
             const maxX = window.innerWidth * 0.9;
             const minY = window.innerHeight * 0.1;
