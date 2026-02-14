@@ -73,7 +73,7 @@ h1 {
     /* Aligned starting point */
     left: calc(50% + 15px);
     top: calc(50% + 48px); 
-    z-index: 51;
+    z-index: 49;
     transition: left 0.15s ease-out, top 0.15s ease-out;
 }
 
@@ -109,3 +109,4 @@ h1 {
     background: rgba(0,0,0,0.8);
     z-index: 2500;
 }
+
