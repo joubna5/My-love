@@ -71,7 +71,7 @@ h1 {
 }
 
 #noBtn {
-    z-index: 20; 
+    z-index: 999; /* Always in front */
     transition: left 0.15s ease-out, top 0.15s ease-out;
 }
 
