@@ -12,26 +12,27 @@
     <div id="overlay"></div>
 
     <div class="proposal-box">
-        <h1>Can we be each other's Valentine, My princess?</h1>
+        <h1>Can we be each other's Valentine, Princess?</h1>
         <div class="main-btn-wrapper">
             <div class="btn-slot">
                 <button class="val-btn" id="yesBtn" onclick="handleYes()">Yes</button>
             </div>
             <div class="btn-slot">
-                <button class="val-btn" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
-            </div>
+                </div>
         </div>
     </div>
 
+    <button class="val-btn" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+
     <div id="alertYes" class="custom-alert">
         <h2>Oh, so you do love me 💖</h2>
-         <p>FINALLY, now wait till the GIFT is ready my little boo</p>
+        <p>FINALLY, now wait till the Gift is ready</p>
         <button onclick="closeAlert('alertYes')">Close</button>
     </div>
 
     <div id="alertNo" class="custom-alert">
-        <h2>No way you said yes</h2>
-        <p>Now we wait till the gift is ready baby girl</p>
+        <h2>So you said yes</h2>
+        <p>Now wait till the Gift is ready</p>
         <button onclick="closeAlert('alertNo')">Close</button>
     </div>
 
@@ -48,9 +49,6 @@
             const noBtn = document.getElementById('noBtn');
             const yesBtn = document.getElementById('yesBtn');
             moveCount++;
-
-            // Immediately switch to fixed to allow free movement across the screen
-            noBtn.style.position = 'fixed';
 
             if (moveCount > 2) {
                 yesScale += 0.4;
@@ -74,11 +72,12 @@
             let foundSafeSpot = false;
             let attempts = 0;
 
-            // 2. INNER DEAD ZONE: Avoid the Yes button
+            // 2. INNER DEAD ZONE: Try to find a spot that is NOT the Yes button
             while (!foundSafeSpot && attempts < 100) {
                 let testX = Math.random() * (maxX - minX - btnW) + minX;
                 let testY = Math.random() * (maxY - minY - btnH) + minY;
 
+                // Check if test point is inside Yes button boundaries
                 const isOverlappingYes = !(
                     testX + btnW < yesRect.left ||
                     testX > yesRect.right ||
@@ -94,17 +93,19 @@
                 attempts++;
             }
 
-            // 3. EMERGENCY JITTER: 6px fallback
+            // 3. EMERGENCY JITTER: If no safe spot found (Yes is too big), enter Yes area
             if (!foundSafeSpot) {
                 const currentRect = noBtn.getBoundingClientRect();
-                finalX = currentRect.left + (Math.random() > 0.5 ? 15 : -15);
-                finalY = currentRect.top + (Math.random() > 0.5 ? 15 : -15);
+                // Remove Yes deadzone restriction and just jitter 3px
+                finalX = currentRect.left + (Math.random() > 0.5 ? 3 : -3);
+                finalY = currentRect.top + (Math.random() > 0.5 ? 3 : -3);
             }
 
-            // FINAL CLAMP: Strict 140px lockdown
+            // FINAL CLAMP: Strict 140px lockdown (Outer Dead Zone is never removed)
             finalX = Math.max(minX, Math.min(finalX, maxX - btnW));
             finalY = Math.max(minY, Math.min(finalY, maxY - btnH));
 
+            noBtn.style.position = 'fixed';
             noBtn.style.left = `${finalX}px`;
             noBtn.style.top = `${finalY}px`;
             noBtn.style.zIndex = "2000"; 
