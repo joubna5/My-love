@@ -62,29 +62,33 @@
             const centerX = yesRect.left + (yesRect.width / 2);
             const centerY = yesRect.top + (yesRect.height / 2);
 
-            // 70% Screen Boundaries (15% margin on each side)
-            const minX = window.innerWidth * 0.3;
-            const maxX = window.innerWidth * 0.7;
-            const minY = window.innerHeight * 0.3;
-            const maxY = window.innerHeight * 0.7;
+            // 70% Screen Boundaries (15% margin)
+            const minX = window.innerWidth * 0.15;
+            const maxX = window.innerWidth * 0.85;
+            const minY = window.innerHeight * 0.15;
+            const maxY = window.innerHeight * 0.85;
 
-            // Minimum radius: Just outside the Yes button edge
-            const currentRadiusMin = (yesRect.width / 2) + 20; 
+            // Minimum radius: Edge of Yes button
+            const currentRadiusMin = (yesRect.width / 2) + 15; 
 
-            // Maximum radius: Distance to the nearest 70% boundary
+            // Maximum radius: Smallest distance to any 70% border
             const distToLeft = centerX - minX;
             const distToRight = maxX - centerX;
             const distToTop = centerY - minY;
             const distToBottom = maxY - centerY;
             
-            const currentRadiusMax = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+            let currentRadiusMax = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+
+            // MOBILE PROTECTION: If the radius is too large for a small screen, shrink it
+            if (window.innerWidth < 600 && currentRadiusMax > window.innerWidth * 0.35) {
+                currentRadiusMax = window.innerWidth * 0.35;
+            }
 
             let finalX, finalY;
             let attempts = 0;
 
             do {
                 const angle = Math.random() * Math.PI * 2;
-                // Generate radius between the button edge and the 70% screen border
                 const radius = Math.random() * (currentRadiusMax - currentRadiusMin) + currentRadiusMin;
 
                 finalX = centerX + (Math.cos(angle) * radius);
