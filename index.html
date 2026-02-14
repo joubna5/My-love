@@ -32,8 +32,8 @@
 
     <div id="alertNo" class="custom-alert">
         <h2>No way you said yes</h2>
-        <p>Now we wait till the gift is ready baby girl <span id="moveCountDisplay"></span></p>
-        <button onclick="closeAlert('alertNo')">Close</button>
+        <p>Now we wait till the gift is ready baby girl</p>
+        <button onclick="closeAlert('alertNo')"><span id="moveCountDisplay"></span></button>
     </div>
 
     <script>
@@ -45,7 +45,7 @@
                 showAlert('alertYes');
             } else {
                 // Only adds the number to the span, doesn't edit your original text
-                document.getElementById('moveCountDisplay').innerText = `(${moveCount})`;
+                document.getElementById('moveCountDisplay').innerText = `${moveCount}😊`;
                 showAlert('alertNo');
             }
         }
