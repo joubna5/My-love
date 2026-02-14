@@ -59,7 +59,6 @@
             }
 
             const yesRect = yesBtn.getBoundingClientRect();
-            // We use the center of the Yes button as our anchor point
             const centerX = yesRect.left + (yesRect.width / 2);
             const centerY = yesRect.top + (yesRect.height / 2);
 
@@ -69,10 +68,9 @@
             const minY = window.innerHeight * 0.15;
             const maxY = window.innerHeight * 0.7;
 
-            // Setting Min Radius to 0 allows it to "sit" on the Yes button
+            // Allow the No button to land on top of the Yes button
             const currentRadiusMin = 0; 
             
-            // Max Radius is the distance to the nearest 70% border
             let currentRadiusMax = Math.min(
                 centerX - minX, 
                 maxX - centerX, 
@@ -93,8 +91,8 @@
                 finalY = centerY + (Math.sin(angle) * radius);
                 attempts++;
 
-                // Ensure the button's edges stay within the 70% screen area
-            } while (attempts < 100 && (
+                // VALIDATION: Ensure the entire button box stays within the 70% area
+            } while (attempts < 150 && (
                 (finalX - btnW/2) < minX || (finalX + btnW/2) > maxX || 
                 (finalY - btnH/2) < minY || (finalY + btnH/2) > maxY
             ));
@@ -103,8 +101,8 @@
             noBtn.style.left = `${finalX - (btnW / 2)}px`;
             noBtn.style.top = `${finalY - (btnH / 2)}px`;
             noBtn.style.margin = "0";
-            // z-index 999 ensures it stays in front of the Yes button
-            noBtn.style.zIndex = "999";
+            // FORCE NO BUTTON TO THE FRONT
+            noBtn.style.zIndex = "9999";
         }
 
         function showAlert(id) {
@@ -119,4 +117,3 @@
     </script>
 </body>
 </html>
-
