@@ -38,8 +38,6 @@
     <script>
         let moveCount = 0;
         let yesScale = 1;
-        let baseRadiusMin = 110; 
-        let baseRadiusMax = 170;
 
         function handleYes() {
             if (moveCount === 0) {
@@ -55,20 +53,23 @@
 
             moveCount++;
 
-            // 1. Growth Logic (No changes to Yes position, only size)
+            // 1. Growth Logic for Yes Button
             if (moveCount > 2) {
                 yesScale += 0.4;
                 yesBtn.style.transform = `scale(${yesScale})`;
-                baseRadiusMin += 30; 
-                baseRadiusMax += 30;
             }
 
-            // 2. Find Center of Yes Button for Orbit
+            // 2. Get the current size and center of the Yes button
             const yesRect = yesBtn.getBoundingClientRect();
             const centerX = yesRect.left + (yesRect.width / 2);
             const centerY = yesRect.top + (yesRect.height / 2);
 
-            // 3. Screen Boundaries (90% visible area)
+            // 3. DYNAMIC RADIUS: Start the orbit just outside the Yes button's current width
+            // We add 40px as a safety buffer so they don't touch
+            let currentRadiusMin = (yesRect.width / 2) + 40; 
+            let currentRadiusMax = currentRadiusMin + 80;
+
+            // 4. Screen Boundaries (90% visible area)
             const minX = window.innerWidth * 0.1;
             const maxX = window.innerWidth * 0.9;
             const minY = window.innerHeight * 0.1;
@@ -79,7 +80,7 @@
 
             do {
                 const angle = Math.random() * Math.PI * 2;
-                const radius = Math.floor(Math.random() * (baseRadiusMax - baseRadiusMin + 1)) + baseRadiusMin; 
+                const radius = Math.floor(Math.random() * (currentRadiusMax - currentRadiusMin + 1)) + currentRadiusMin; 
 
                 finalX = centerX + (Math.cos(angle) * radius);
                 finalY = centerY + (Math.sin(angle) * radius);
@@ -89,11 +90,12 @@
                 finalY < minY || (finalY + noBtn.offsetHeight/2) > maxY
             ));
 
-            // Only the No button gets position fixed to move around the screen
+            // Only the No button moves
             noBtn.style.position = 'fixed';
             noBtn.style.left = `${finalX - (noBtn.offsetWidth / 2)}px`;
             noBtn.style.top = `${finalY - (noBtn.offsetHeight / 2)}px`;
             noBtn.style.margin = "0";
+            noBtn.style.zIndex = "999";
         }
 
         function showAlert(id) {
